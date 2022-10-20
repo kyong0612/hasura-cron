@@ -1,0 +1,49 @@
+
+
+version: '3.8'
+services:
+  db:
+    container_name: db
+    image: 'postgres:latest'
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: Asia/Tokyo
+  hasura:
+    container_name: hasura
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '${HASURA_PORT:-8080}:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: 'on-failure:10'
+    networks:
+      - default
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres'
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
+      HASURA_GRAPHQL_DEV_MODE: 'true'
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: 'startup, http-log, webhook-log, websocket-log, query-log'
+      HASURA_GRAPHQL_ADMIN_SECRET: 'secret'
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: 'naming_convention'
+      HASURA_GRAPHQL_DEFAULT_NAMING_CONVENTION: 'graphql-default'
+volumes:
+  db_data: null
+  go_modules: null
