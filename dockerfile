@@ -23,4 +23,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
+
 CMD ["/usr/bin/supervisord"]
