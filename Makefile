@@ -4,3 +4,6 @@ run:
 	
 hasura-helth-check:
 	curl http://127.0.0.1:8080/healthz
+
+hasura-bash:
+	docker container exec -it hasura bash
