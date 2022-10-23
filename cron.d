@@ -1,0 +1,1 @@
+* * * * * root /app/hello.sh >> /var/log/cron.log

@@ -1,2 +1,1 @@
 # hasura-cron
-# hasura-cron
