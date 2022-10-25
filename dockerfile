@@ -10,8 +10,12 @@ RUN apt-get update
 
 # crond
 RUN apt-get install -y cron
-COPY ./cron.d /etc/cron.d
-RUN chmod 0644 /etc/cron.d/*
+COPY crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
+
+# Running crontab
+RUN crontab /etc/cron.d/crontab
+
 
 
 # superpisor
